@@ -8,7 +8,9 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "typecheck": "nuxt typecheck"
+    "typecheck": "nuxt typecheck",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.104",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "eslint": "^10.2.1",
+    "oxfmt": "^0.47.0",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.2.7"
   },
