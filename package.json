@@ -8,6 +8,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
@@ -16,7 +17,7 @@
     "@iconify-json/lucide": "^1.2.104",
     "@iconify-json/simple-icons": "^1.2.80",
     "@nuxt/ui": "^4.7.0",
-    "nuxt": "^4.4.2",
+    "nuxt": "^4.4.4",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {

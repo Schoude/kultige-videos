@@ -1,6 +1,10 @@
 // @ts-check
-import withNuxt from "./.nuxt/eslint.config.mjs";
+import withNuxt from './.nuxt/eslint.config.mjs';
 
-export default withNuxt(
-  // Your custom configs here
-);
+export default withNuxt({
+  files: ['**/*.{ts,tsx,vue,mjs}'],
+  rules: {
+    '@stylistic/semi': ['error', 'always'],
+    '@stylistic/comma-dangle': ['error', 'always-multiline'],
+  },
+});
