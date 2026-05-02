@@ -9,11 +9,25 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   routeRules: {
-    '/': { prerender: true },
-    '/sign-in': { prerender: true, appLayout: 'sign-in' },
+    '/': {
+      prerender: true,
+
+      appMiddleware: ['auth'],
+    },
+    '/sign-in': {
+      prerender: true,
+      appLayout: 'sign-in',
+      appMiddleware: ['auth'],
+    },
   },
 
   compatibilityDate: '2025-01-15',
+
+  vite: {
+    optimizeDeps: {
+      include: ['better-auth/vue'],
+    },
+  },
 
   eslint: {
     config: {

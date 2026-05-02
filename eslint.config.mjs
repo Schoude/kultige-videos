@@ -6,5 +6,19 @@ export default withNuxt({
   rules: {
     '@stylistic/semi': ['error', 'always'],
     '@stylistic/comma-dangle': ['error', 'always-multiline'],
+    '@stylistic/member-delimiter-style': [
+      'error',
+      {
+        multiline: {
+          delimiter: 'semi',
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: 'semi',
+          requireLast: false,
+        },
+        multilineDetection: 'brackets',
+      },
+    ],
   },
 });
