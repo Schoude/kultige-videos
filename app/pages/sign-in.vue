@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import { authClient } from '~~/lib/auth-client';
+
+const loading = ref(false);
+
+async function signIn() {
+  loading.value = true;
+  await authClient.signIn.social({ provider: 'google' });
+}
 </script>
 
 <template>
@@ -17,8 +24,9 @@ import { authClient } from '~~/lib/auth-client';
       <template #footer>
         <UButton
           label="Sign in"
+          :loading
           class="w-full justify-center"
-          @click="authClient.signIn.social({ provider: 'google' })"
+          @click="signIn"
         />
       </template>
     </UCard>
