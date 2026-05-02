@@ -22,7 +22,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['better-auth/vue'],
+      include: ['better-auth/vue', '@vueuse/core'],
     },
   },
 

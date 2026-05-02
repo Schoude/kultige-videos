@@ -10,7 +10,7 @@ async function signIn() {
 </script>
 
 <template>
-  <div class="grid h-screen place-items-center">
+  <UMain class="grid h-screen place-items-center">
     <UCard
       title="Sign in here"
       variant="soft"
@@ -30,5 +30,5 @@ async function signIn() {
         />
       </template>
     </UCard>
-  </div>
+  </UMain>
 </template>

@@ -14,12 +14,12 @@ async function signOut() {
 </script>
 
 <template>
-  <div>
+  <UMain>
     <UButton
       label="Sign out"
       :loading
       class="w-full justify-center"
       @click="signOut"
     />
-  </div>
+  </UMain>
 </template>
