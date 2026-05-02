@@ -10,12 +10,9 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': {
-      prerender: true,
-
       appMiddleware: ['auth'],
     },
     '/sign-in': {
-      prerender: true,
       appLayout: 'sign-in',
       appMiddleware: ['auth'],
     },
