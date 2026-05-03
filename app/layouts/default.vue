@@ -12,7 +12,10 @@ const items = [
   {
     label: 'Trending',
     icon: 'i-lucide-house',
-    to: '/trending',
+  },
+  {
+    label: 'Startseite',
+    icon: 'i-lucide-house',
   },
 ] as NavigationMenuItem[];
 
@@ -23,37 +26,42 @@ defineShortcuts({
 
 <template>
   <UApp>
-    <UDashboardGroup>
-      <UDashboardSidebar
-        collapsible
-        :collapsed="open"
+    <div class="flex flex-1 flex-col">
+      <UHeader
+        title="Kultige Videos"
+        toggle-side="left"
+        :ui="{ container: 'px-4!' }"
       >
-        <template #header>
-          Meddl
+        <template #toggle>
+          <UButton
+            icon="i-lucide-panel-left"
+            variant="ghost"
+            aria-label="Toggle sidebar"
+            @click="open = !open"
+          />
         </template>
+      </UHeader>
 
-        <UNavigationMenu
-          :items="items"
-          orientation="vertical"
-        />
-      </UDashboardSidebar>
+      <div class="flex min-h-0 flex-1">
+        <USidebar
+          v-model:open="open"
+          collapsible="icon"
+          :ui="{
+            gap: 'h-[calc(100%-var(--ui-header-height))]',
+            container: 'absolute top-(--ui-header-height) bottom-0 h-[calc(100%-var(--ui-header-height))]'
+          }"
+        >
+          <UNavigationMenu
+            :items="items"
+            orientation="vertical"
+            :ui="{ link: 'p-1.5 overflow-hidden' }"
+          />
+        </USidebar>
 
-      <UDashboardPanel>
-        <template #header>
-          <UDashboardNavbar>
-            <template #leading>
-              <UDashboardSidebarCollapse />
-            </template>
-
-            <UDashboardSearchButton />
-          </UDashboardNavbar>
-        </template>
-
-        <template #body>
+        <UMain class="flex-1 p-4">
           <slot />
-        </template>
-      </UDashboardPanel>
-      <UDashboardSearch />
-    </UDashboardGroup>
+        </UMain>
+      </div>
+    </div>
   </UApp>
 </template>
