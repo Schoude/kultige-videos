@@ -7,15 +7,13 @@ const loading = ref(false);
 
 async function signIn(provider: 'google' | 'kakao') {
   loading.value = true;
-  const { error, data } = await supabase.auth.signInWithOAuth({
+  const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
       redirectTo: 'http://localhost:3000/confirm',
     },
   });
   if (error) console.log(error);
-
-  console.log(data);
 }
 </script>
 
