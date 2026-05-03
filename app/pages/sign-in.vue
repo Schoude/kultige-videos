@@ -3,15 +3,16 @@ import { authClient } from '~~/lib/auth-client';
 
 const loading = ref(false);
 
-async function signIn() {
+async function signIn(provider: 'google' | 'kakao') {
   loading.value = true;
-  await authClient.signIn.social({ provider: 'google' });
+
+  await authClient.signIn.social({ provider: provider });
 }
 </script>
 
 <template>
   <UMain class="grid h-screen place-items-center">
-    <section class="grid">
+    <section class="grid gap-6">
       <img
         width="230"
         class="mx-auto"
@@ -22,25 +23,25 @@ async function signIn() {
         Kultige Videos
       </h1>
 
-      <UCard
-        class="mt-6"
-        title="Sign in here"
+      <UButton
+        label="Google"
+        :loading
+        icon="i-simple-icons-google"
+        block
         variant="outline"
-      >
-        <template #description>
-          Hello!
-        </template>
+        size="xl"
+        @click="signIn('google')"
+      />
 
-        <template #footer>
-          <UButton
-            label="Sign in"
-            :loading
-            icon="i-simple-icons-google"
-            class="w-full"
-            @click="signIn"
-          />
-        </template>
-      </UCard>
+      <UButton
+        label="Kakao"
+        :loading
+        icon="i-simple-icons-kakao"
+        block
+        variant="outline"
+        size="xl"
+        @click="signIn('kakao')"
+      />
     </section>
   </UMain>
 </template>
