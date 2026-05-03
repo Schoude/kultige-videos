@@ -1,8 +1,14 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: 'teal',
-      neutral: 'slate',
+      primary: 'indigo',
+      neutral: 'stone',
+      secondary: 'blue',
+    },
+    header: {
+      slots: {
+        container: 'max-w-auto',
+      },
     },
   },
 });

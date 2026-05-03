@@ -25,7 +25,8 @@ async function signIn() {
         <UButton
           label="Sign in"
           :loading
-          class="w-full justify-center"
+          icon="i-simple-icons-google"
+          class="w-full"
           @click="signIn"
         />
       </template>

@@ -9,6 +9,11 @@ const items = [
     icon: 'i-lucide-house',
     to: '/',
   },
+  {
+    label: 'Trending',
+    icon: 'i-lucide-house',
+    to: '/trending',
+  },
 ] as NavigationMenuItem[];
 
 defineShortcuts({
@@ -18,32 +23,37 @@ defineShortcuts({
 
 <template>
   <UApp>
-    <div class="flex flex-1">
-      <USidebar
-        v-model:open="open"
-        title="Kultige Videos"
-        collapsible="icon"
+    <UDashboardGroup>
+      <UDashboardSidebar
+        collapsible
+        :collapsed="open"
       >
+        <template #header>
+          Meddl
+        </template>
+
         <UNavigationMenu
           :items="items"
           orientation="vertical"
-          :ui="{ link: 'p-1.5 overflow-hidden' }"
         />
-      </USidebar>
-      <div class="flex-1">
-        <UHeader>
-          <template #left>
-            <UButton
-              icon="i-lucide-panel-left"
-              color="neutral"
-              variant="ghost"
-              aria-label="Toggle sidebar"
-              @click="open = !open"
-            />
-          </template>
-        </UHeader>
-        <NuxtPage />
-      </div>
-    </div>
+      </UDashboardSidebar>
+
+      <UDashboardPanel>
+        <template #header>
+          <UDashboardNavbar>
+            <template #leading>
+              <UDashboardSidebarCollapse />
+            </template>
+
+            <UDashboardSearchButton />
+          </UDashboardNavbar>
+        </template>
+
+        <template #body>
+          <slot />
+        </template>
+      </UDashboardPanel>
+      <UDashboardSearch />
+    </UDashboardGroup>
   </UApp>
 </template>

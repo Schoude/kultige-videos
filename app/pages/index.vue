@@ -14,12 +14,10 @@ async function signOut() {
 </script>
 
 <template>
-  <UMain>
-    <UButton
-      label="Sign out"
-      :loading
-      class="w-full justify-center"
-      @click="signOut"
-    />
-  </UMain>
+  <UButton
+    label="Sign out"
+    :loading
+    icon="i-lucide-log-out"
+    @click="signOut"
+  />
 </template>
