@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { authClient } from '~~/lib/auth-client';
+// import { authClient } from '~~/lib/auth-client';
+
+const supabase = useSupabaseClient();
 
 const loading = ref(false);
 
 async function signIn(provider: 'google' | 'kakao') {
   loading.value = true;
+  const { error, data } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: 'http://localhost:3000/confirm',
+    },
+  });
+  if (error) console.log(error);
 
-  await authClient.signIn.social({ provider: provider });
+  console.log(data);
 }
 </script>
 

@@ -1,25 +1,5 @@
-<script setup lang="ts">
-import { authClient } from '~~/lib/auth-client';
-
-const loading = ref(false);
-
-async function signOut() {
-  loading.value = true;
-  const result = await authClient.signOut();
-
-  if (result.data?.success) {
-    globalThis.location.reload();
-  }
-}
-</script>
-
 <template>
   <div>
-    <UButton
-      label="Sign out"
-      :loading
-      icon="i-lucide-log-out"
-      @click="signOut"
-    />
+    <h1>The content goes here~</h1>
   </div>
 </template>

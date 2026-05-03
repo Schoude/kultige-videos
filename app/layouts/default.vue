@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
-import { authClient } from '~~/lib/auth-client';
 
-const { data: session } = await authClient.useSession(useFetch);
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 
-const user = computed(() => ({
-  name: session.value?.user.name,
+const buttonUser = computed(() => ({
+  name: user.value?.user_metadata?.full_name,
   avatar: {
-    src: session.value!.user.image as string,
-    alt: session.value?.user.name,
+    src: user.value?.user_metadata?.picture,
+    alt: user.value?.user_metadata?.full_name,
   },
 }));
 
@@ -50,9 +50,9 @@ const loading = ref(false);
 
 async function signOut() {
   loading.value = true;
-  const result = await authClient.signOut();
+  const result = await client.auth.signOut({ scope: 'local' });
 
-  if (result.data?.success) {
+  if (!result.error) {
     globalThis.location.reload();
   }
 }
@@ -98,8 +98,8 @@ async function signOut() {
               :ui="{ content: 'w-(--reka-dropdown-menu-trigger-width) min-w-48' }"
             >
               <UButton
-                v-bind="user"
-                :label="user?.name"
+                v-bind="buttonUser"
+                :label="buttonUser?.name"
                 trailing-icon="i-lucide-chevrons-up-down"
                 color="neutral"
                 variant="ghost"
