@@ -11,25 +11,36 @@ async function signIn() {
 
 <template>
   <UMain class="grid h-screen place-items-center">
-    <UCard
-      title="Sign in here"
-      variant="soft"
-    >
-      <template #description>
-        Hello!
-      </template>
+    <section class="grid">
+      <img
+        width="230"
+        class="mx-auto"
+        src="/logo.webp"
+        alt="Logo"
+      >
+      <h1 class="text-4xl font-semibold">
+        Kultige Videos
+      </h1>
 
-      <p>This is cool</p>
+      <UCard
+        class="mt-6"
+        title="Sign in here"
+        variant="outline"
+      >
+        <template #description>
+          Hello!
+        </template>
 
-      <template #footer>
-        <UButton
-          label="Sign in"
-          :loading
-          icon="i-simple-icons-google"
-          class="w-full"
-          @click="signIn"
-        />
-      </template>
-    </UCard>
+        <template #footer>
+          <UButton
+            label="Sign in"
+            :loading
+            icon="i-simple-icons-google"
+            class="w-full"
+            @click="signIn"
+          />
+        </template>
+      </UCard>
+    </section>
   </UMain>
 </template>
