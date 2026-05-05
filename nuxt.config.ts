@@ -25,6 +25,9 @@ export default defineNuxtConfig({
     '/login': {
       appLayout: 'login',
     },
+    '/confirm': {
+      appLayout: 'confirm',
+    },
   },
 
   compatibilityDate: '2025-01-15',
