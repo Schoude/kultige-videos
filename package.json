@@ -11,11 +11,12 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
     "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt:check": "oxfmt --check",
+    "supabase": "vpx supabase"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.105",
-    "@iconify-json/simple-icons": "^1.2.80",
+    "@iconify-json/simple-icons": "^1.2.81",
     "@nuxt/ui": "^4.7.1",
     "@nuxtjs/supabase": "2.0.6",
     "nuxt": "^4.4.4",

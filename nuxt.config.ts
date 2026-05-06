@@ -28,6 +28,9 @@ export default defineNuxtConfig({
     '/confirm': {
       appLayout: 'confirm',
     },
+    '/upload': {
+      appMiddleware: ['admin'],
+    },
   },
 
   compatibilityDate: '2025-01-15',
