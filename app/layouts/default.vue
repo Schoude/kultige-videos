@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 
+const { data: roles } = await useFetch('/api/user-roles', {
+  headers: useRequestHeaders(['cookies']),
+});
 const client = useSupabaseClient();
 const user = useSupabaseUser();
+const isAdmin = computed(() => roles.value?.includes('admin') ?? false);
 
 const buttonUser = computed(() => ({
   name: user.value?.user_metadata?.full_name,
@@ -24,11 +28,15 @@ const items = [
     label: 'Trending',
     icon: 'i-lucide-house',
   },
-  {
-    label: 'Startseite',
-    icon: 'i-lucide-house',
-  },
 ] as NavigationMenuItem[];
+
+if (isAdmin.value) {
+  items.push({
+    label: 'Video hochladen',
+    icon: 'i-lucide-circle-plus',
+    to: '/upload',
+  });
+}
 
 const userItems = [
   [
