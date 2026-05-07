@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 
-const { data: roles } = await useFetch('/api/user-roles', {
-  headers: useRequestHeaders(['cookies']),
-});
 const client = useSupabaseClient();
 const user = useSupabaseUser();
-const isAdmin = computed(() => roles.value?.includes('admin') ?? false);
+const { isAdmin } = await useIsAdmin();
 
 const buttonUser = computed(() => ({
   name: user.value?.user_metadata?.full_name,
