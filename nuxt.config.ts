@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/supabase'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxtjs/supabase', '@regle/nuxt'],
 
   devtools: {
     enabled: true,
@@ -42,5 +42,9 @@ export default defineNuxtConfig({
         braceStyle: '1tbs',
       },
     },
+  },
+
+  regle: {
+    setupFile: '~/regle-config.ts',
   },
 });
