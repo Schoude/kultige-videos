@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type { InferInput } from '@regle/core';
-import { required, minLength, withMessage, fileType, maxFileSize } from '@regle/rules';
+import { mergeRegles, type InferInput } from '@regle/core';
+import { required, minLength, maxLength, withMessage, fileType, maxFileSize } from '@regle/rules';
 
 import { useRegle } from '#imports';
 
@@ -14,7 +14,11 @@ const MB_1 = 1_000_000;
 const { r$ } = useRegle(
   { title: '', description: '' },
   {
-    title: { required, minLength: withMessage(minLength(5), 'Must be at least 5 characters') },
+    title: {
+      required,
+      minLength: withMessage(minLength(5), 'Muss min. 5 Zeichen lang sein'),
+      maxLength: withMessage(maxLength(300), 'Darf max. 300 Zeichen lang sein'),
+    },
     description: {},
   },
 );
@@ -23,11 +27,14 @@ const { r$: file$ } = useRegle(
   { file: null as File | null },
   {
     file: {
+      required,
       fileType: fileType(['video/mp4']),
       maxFileSize: maxFileSize(MB_1 * 100),
     },
   },
 );
+
+const forms = mergeRegles({ r$, file$ });
 
 type Schema = InferInput<typeof r$>;
 
@@ -89,6 +96,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UButton
           type="submit"
           :loading
+          :disabled="forms.$invalid"
         >
           Video hochladen
         </UButton>
