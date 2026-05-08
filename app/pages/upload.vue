@@ -30,7 +30,9 @@ const { r$: file$ } = useRegle(
 );
 
 type Schema = InferInput<typeof r$>;
-// type FileValidation= InferInput<typeof file$>;
+
+const fileName = computed(() => file$.$value.file?.name);
+const fileSize = computed(() => formatFileSize(file$.$value.file?.size ?? 0));
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' });
@@ -46,54 +48,76 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-  <div>
+  <section>
     <h1 class="mb-4 text-2xl">
       Video hochladen
     </h1>
-    <UForm
-      :schema="r$"
-      :state="r$.$value"
-      class="space-y-4"
-      @submit.prevent="onSubmit"
-    >
-      <UFormField
-        label="Titel"
-        name="title"
+    <div class="grid grid-cols-2 gap-4">
+      <UForm
+        :schema="r$"
+        :state="r$.$value"
+        class="space-y-4"
+        @submit.prevent="onSubmit"
       >
-        <UInput
-          v-model="r$.$value.title"
-          size="xl"
-        />
-      </UFormField>
+        <UFormField
+          label="Titel"
+          name="title"
+          block
+        >
+          <UInput
+            v-model="r$.$value.title"
+            size="xl"
+            :ui="{
+              root: 'w-full'
+            }"
+          />
+        </UFormField>
 
-      <UFormField
-        label="Beschreibung"
-        name="description"
-      >
-        <UTextarea
-          v-model="r$.$value.description"
-          size="xl"
-          :rows="5"
-          :resize="false"
-        />
-      </UFormField>
+        <UFormField
+          label="Beschreibung"
+          name="description"
+        >
+          <UTextarea
+            v-model="r$.$value.description"
+            size="xl"
+            :rows="5"
+            :resize="false"
+            :ui="{ root: 'w-full' }"
+          />
+        </UFormField>
 
-      <UButton
-        type="submit"
-        :loading
-      >
-        Submit
-      </UButton>
-    </UForm>
-    <UForm :state="file$.$value">
-      <UFormField>
-        <UFileUpload
-          v-model="file$.$value.file"
-          dropzone
-          accept="video/*"
-          class="min-h-48 w-96"
-        />
-      </UFormField>
-    </UForm>
-  </div>
+        <UButton
+          type="submit"
+          :loading
+        >
+          Video hochladen
+        </UButton>
+      </UForm>
+
+      <UForm :state="file$.$value">
+        <UFormField>
+          <UFileUpload
+            v-model="file$.$value.file"
+            label="Wähle eine Videodatei aus"
+            dropzone
+            accept="video/*"
+            class="min-h-60"
+          />
+          <template #help>
+            <p
+              v-if="file$.$value.file"
+              class="flex gap-2"
+            >
+              <span>
+                Ausgewählte Datei: <span class="text-secondary">{{ fileName }}</span>
+              </span>
+              <span>
+                Dateigröße: <span class="text-secondary">{{ fileSize }}</span>
+              </span>
+            </p>
+          </template>
+        </UFormField>
+      </UForm>
+    </div>
+  </section>
 </template>
