@@ -10,5 +10,6 @@
   "sortImports": true,
   "sortPackageJson": true,
   "sortTailwindcss": true,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "objectWrap": "preserve"
 }

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui';
 import type { InferInput } from '@regle/core';
-import { required, minLength, withMessage } from '@regle/rules';
+import { required, minLength, withMessage, fileType, maxFileSize } from '@regle/rules';
 
 import { useRegle } from '#imports';
 
 const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
+
+const MB_1 = 1_000_000;
 
 const { r$ } = useRegle(
   { title: '', description: '' },
@@ -17,7 +19,18 @@ const { r$ } = useRegle(
   },
 );
 
+const { r$: file$ } = useRegle(
+  { file: null as File | null },
+  {
+    file: {
+      fileType: fileType(['video/mp4']),
+      maxFileSize: maxFileSize(MB_1 * 100),
+    },
+  },
+);
+
 type Schema = InferInput<typeof r$>;
+// type FileValidation= InferInput<typeof file$>;
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' });
@@ -72,5 +85,16 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         Submit
       </UButton>
     </UForm>
+    <UForm :state="file$.$value">
+      <UFormField>
+        <UFileUpload
+          v-model="file$.$value.file"
+          dropzone
+          accept="video/*"
+          class="min-h-48 w-96"
+        />
+      </UFormField>
+    </UForm>
+    <pre>{{ file$.$errors }}</pre>
   </div>
 </template>
