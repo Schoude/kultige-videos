@@ -95,6 +95,5 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         />
       </UFormField>
     </UForm>
-    <pre>{{ file$.$errors }}</pre>
   </div>
 </template>

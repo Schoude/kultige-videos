@@ -11,5 +11,6 @@
   "sortPackageJson": true,
   "sortTailwindcss": true,
   "endOfLine": "lf",
-  "objectWrap": "preserve"
+  "objectWrap": "preserve",
+  "singleAttributePerLine": true
 }
