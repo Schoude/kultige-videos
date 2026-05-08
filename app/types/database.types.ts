@@ -55,21 +55,33 @@ export type Database = {
       videos: {
         Row: {
           created_at: string
+          deleted_at: string | null
           description: string | null
-          id: number
+          id: string
           title: string
+          updated_at: string
+          user_id: string
+          view_count: number
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
-          id?: number
+          id?: string
           title: string
+          updated_at?: string
+          user_id: string
+          view_count?: number
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
-          id?: number
+          id?: string
           title?: string
+          updated_at?: string
+          user_id?: string
+          view_count?: number
         }
         Relationships: []
       }
