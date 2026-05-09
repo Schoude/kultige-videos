@@ -21,6 +21,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  vue: {
+    compilerOptions: {
+      isCustomElement: tag => tag.startsWith('video'),
+    },
+  },
+
   routeRules: {
     '/login': {
       appLayout: 'login',

@@ -10,7 +10,7 @@ async function signIn(provider: 'google' | 'kakao') {
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      redirectTo: 'http://localhost:3000/confirm',
+      redirectTo: `${window.location.origin}/confirm`,
     },
   });
   if (error) console.log(error);

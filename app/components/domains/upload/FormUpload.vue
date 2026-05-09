@@ -5,12 +5,23 @@ import { required, minLength, maxLength, withMessage, fileType, maxFileSize } fr
 
 import { useRegle } from '#imports';
 
+useHead({
+  script: [
+    {
+      type: 'module',
+      src: 'https://cdn.jsdelivr.net/npm/@videojs/html/cdn/video.js',
+    },
+  ],
+});
+const client = useSupabaseClient();
 const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
 
 const MB_1 = 1_000_000;
 
+const vId = ref(generateVideoId());
+const previewUrl = ref('');
 const { r$ } = useRegle(
   { title: '', description: '' },
   {
@@ -42,15 +53,45 @@ const fileName = computed(() => file$.$value.file?.name);
 const fileSize = computed(() => formatFileSize(file$.$value.file?.size ?? 0));
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  toast.add({ title: 'Success', description: 'The form has been submitted.', color: 'success' });
   loading.value = true;
 
   await $fetch('/api/upload', {
     method: 'POST',
-    body: event.data,
+    body: {
+      ...event.data,
+      url_id: vId.value,
+    },
   });
 
+  toast.add({ title: 'Erfolg', description: 'Das Video wurde erfolgreich gespeichert', color: 'success' });
+
   await router.push('/');
+}
+
+async function onUpload() {
+  previewUrl.value = '';
+  vId.value = generateVideoId();
+
+  const {
+    data: { file },
+    valid,
+  } = await file$.$validate();
+
+  if (!valid || file == null) {
+    return;
+  }
+
+  const extension = getFileExtension(file);
+
+  const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
+  const {
+    data: { publicUrl },
+  } = client.storage.from('videos').getPublicUrl(`${vId.value}/video.${extension}`);
+  previewUrl.value = publicUrl;
+
+  if (res.error) {
+    console.log(res.error);
+  }
 }
 </script>
 
@@ -92,33 +133,44 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         :loading
         :disabled="forms.$invalid"
       >
-        Video hochladen
+        Video speichern
       </UButton>
     </UForm>
 
-    <UForm :state="file$.$value">
-      <UFormField>
-        <UFileUpload
-          v-model="file$.$value.file"
-          label="Wähle eine Videodatei aus"
-          dropzone
-          accept="video/*"
-          class="min-h-60"
-        />
-        <template #help>
-          <p
-            v-if="file$.$value.file"
-            class="flex gap-2"
-          >
-            <span>
-              Ausgewählte Datei: <span class="text-secondary">{{ fileName }}</span>
-            </span>
-            <span>
-              Dateigröße: <span class="text-secondary">{{ fileSize }}</span>
-            </span>
-          </p>
-        </template>
-      </UFormField>
-    </UForm>
+    <div>
+      <UForm :state="file$.$value">
+        <UFormField>
+          <UFileUpload
+            v-model="file$.$value.file"
+            label="Wähle eine Videodatei aus"
+            dropzone
+            accept="video/*"
+            class="min-h-60"
+            @change="onUpload"
+          />
+          <template #help>
+            <p
+              v-if="file$.$value.file"
+              class="flex gap-2"
+            >
+              <span>
+                Ausgewählte Datei: <span class="text-secondary">{{ fileName }}</span>
+              </span>
+              <span>
+                Dateigröße: <span class="text-secondary">{{ fileSize }}</span>
+              </span>
+            </p>
+          </template>
+        </UFormField>
+      </UForm>
+      <video-player v-if="previewUrl">
+        <video-skin class="w-150">
+          <video
+            :src="previewUrl"
+            playsinline
+          />
+        </video-skin>
+      </video-player>
+    </div>
   </div>
 </template>

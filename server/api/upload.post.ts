@@ -15,16 +15,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const vId = generateVideoId();
-
   const res = await client.from('videos').insert({
     title: body.title,
     description: body.description,
+    url_id: body.url_id,
     user_id: user.sub,
-    url_id: vId,
     view_count: 0,
   });
-
   if (res.error) {
     throw createError({
       status: 500,
@@ -32,7 +29,5 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return {
-    urlId: vId,
-  };
+  return res;
 });
