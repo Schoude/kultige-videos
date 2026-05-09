@@ -1,3 +1,5 @@
+import type { Database } from '~~/types/database.types';
+
 import { serverSupabaseClient, serverSupabaseUser } from '#supabase/server';
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +14,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const client = await serverSupabaseClient(event);
+  const client = await serverSupabaseClient<Database>(event);
   const { data, error } = await client.from('user_roles').select('roles (name)').eq('user_id', user.sub);
 
   if (error) {

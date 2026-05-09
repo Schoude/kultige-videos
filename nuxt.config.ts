@@ -53,4 +53,8 @@ export default defineNuxtConfig({
   regle: {
     setupFile: '~/regle-config.ts',
   },
+
+  supabase: {
+    types: '~~/types/database.types',
+  },
 });
