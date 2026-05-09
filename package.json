@@ -15,23 +15,24 @@
     "supabase": "vpx supabase"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.105",
+    "@iconify-json/lucide": "^1.2.106",
     "@iconify-json/simple-icons": "^1.2.81",
     "@nuxt/ui": "^4.7.1",
     "@nuxtjs/supabase": "2.0.6",
     "@regle/core": "^1.24.3",
     "@regle/nuxt": "^1.24.3",
     "@regle/rules": "^1.24.3",
+    "nanoid": "^5.1.11",
     "nuxt": "^4.4.4",
-    "tailwindcss": "^4.2.4"
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.6.2",
     "eslint": "^10.3.0",
     "oxfmt": "^0.48.0",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.2.8"
   },
-  "packageManager": "pnpm@10.33.3"
+  "packageManager": "pnpm@11.0.9"
 }

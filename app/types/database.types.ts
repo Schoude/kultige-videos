@@ -60,6 +60,7 @@ export type Database = {
           id: string
           title: string
           updated_at: string
+          url_id: string
           user_id: string
           view_count: number
         }
@@ -70,6 +71,7 @@ export type Database = {
           id?: string
           title: string
           updated_at?: string
+          url_id: string
           user_id: string
           view_count?: number
         }
@@ -80,6 +82,7 @@ export type Database = {
           id?: string
           title?: string
           updated_at?: string
+          url_id?: string
           user_id?: string
           view_count?: number
         }
