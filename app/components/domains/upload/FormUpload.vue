@@ -20,7 +20,6 @@ const loading = ref(false);
 
 const MB_1 = 1_000_000;
 
-const vId = ref(generateVideoId());
 const previewUrl = ref('');
 const { r$ } = useRegle(
   { title: '', description: '' },
@@ -55,13 +54,14 @@ const fileSize = computed(() => formatFileSize(file$.$value.file?.size ?? 0));
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
 
-  await uploadFiles();
+  const vId = generateVideoId();
+  await uploadFiles(vId);
 
   await $fetch('/api/upload', {
     method: 'POST',
     body: {
       ...event.data,
-      url_id: vId.value,
+      url_id: vId,
     },
   });
 
@@ -77,8 +77,6 @@ async function onSelectFile() {
 
   previewUrl.value = '';
 
-  vId.value = generateVideoId();
-
   const {
     data: { file },
     valid,
@@ -90,7 +88,7 @@ async function onSelectFile() {
   previewUrl.value = URL.createObjectURL(file);
 }
 
-async function uploadFiles() {
+async function uploadFiles(vId: string) {
   const {
     data: { file },
   } = await file$.$validate();
@@ -101,7 +99,7 @@ async function uploadFiles() {
 
   const extension = getFileExtension(file);
 
-  const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
+  const res = await client.storage.from('videos').upload(`${vId}/video.${extension}`, file);
 
   if (res.error) {
     console.log(res.error);
