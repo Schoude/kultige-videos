@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui';
+import type { FormSubmitEvent, RadioGroupItem } from '@nuxt/ui';
 import { mergeRegles, type InferInput } from '@regle/core';
 import { required, minLength, maxLength, withMessage, fileType, maxFileSize } from '@regle/rules';
 
@@ -51,6 +51,24 @@ type Schema = InferInput<typeof r$>;
 const fileName = computed(() => file$.$value.file?.name);
 const fileSize = computed(() => formatFileSize(file$.$value.file?.size ?? 0));
 
+const thumbnailStart = ref(2);
+const thumbnailStartingPoints = ref<RadioGroupItem[]>([
+  {
+    label: '25%',
+    id: 1,
+  },
+  {
+    label: '50%',
+    id: 2,
+  },
+  {
+    label: '75%',
+    id: 3,
+  },
+]);
+const thumbnailFile = ref<Blob | null>(null);
+const thumbnailImage = ref('');
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
 
@@ -75,6 +93,9 @@ async function onSelectFile() {
     URL.revokeObjectURL(previewUrl.value);
   }
 
+  thumbnailFile.value = null;
+  thumbnailImage.value = '';
+
   previewUrl.value = '';
 
   const {
@@ -85,7 +106,21 @@ async function onSelectFile() {
   if (!valid || file == null) {
     return;
   }
+
   previewUrl.value = URL.createObjectURL(file);
+
+  void setThumbnail(file, thumbnailStart.value);
+}
+
+async function setThumbnail(file: File, start: number) {
+  const thumbnailBlob = await generateVideoThumbnail(file, start);
+
+  if (thumbnailBlob == null) {
+    return;
+  }
+
+  thumbnailImage.value = URL.createObjectURL(thumbnailBlob);
+  thumbnailFile.value = thumbnailBlob;
 }
 
 async function uploadFiles(vId: string) {
@@ -105,6 +140,13 @@ async function uploadFiles(vId: string) {
     console.log(res.error);
   }
 }
+
+watch(thumbnailStart, (newStart) => {
+  const file = file$.$value.file;
+
+  URL.revokeObjectURL(thumbnailImage.value);
+  void setThumbnail(file!, newStart);
+});
 </script>
 
 <template>
@@ -139,6 +181,23 @@ async function uploadFiles(vId: string) {
           :ui="{ root: 'w-full' }"
         />
       </UFormField>
+
+      <UFormField label="Startpunkt des Thumbnails">
+        <URadioGroup
+          v-model="thumbnailStart"
+          :disabled="file$.$value.file == null"
+          value-key="id"
+          :items="thumbnailStartingPoints"
+          orientation="horizontal"
+          variant="table"
+          inditator="hidden"
+        />
+      </UFormField>
+
+      <img
+        :src="thumbnailImage"
+        width="200"
+      >
 
       <UButton
         type="submit"
@@ -176,7 +235,7 @@ async function uploadFiles(vId: string) {
         </UFormField>
       </UForm>
       <video-player v-if="previewUrl">
-        <video-skin class="w-150">
+        <video-skin class="w-100">
           <video
             :src="previewUrl"
             playsinline
