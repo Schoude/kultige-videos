@@ -13,7 +13,7 @@ useHead({
     },
   ],
 });
-// const client = useSupabaseClient();
+const client = useSupabaseClient();
 const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
@@ -55,6 +55,8 @@ const fileSize = computed(() => formatFileSize(file$.$value.file?.size ?? 0));
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
 
+  await uploadFiles();
+
   await $fetch('/api/upload', {
     method: 'POST',
     body: {
@@ -68,7 +70,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   await router.push('/');
 }
 
-async function onUpload() {
+async function onSelectFile() {
   if (previewUrl.value !== '') {
     URL.revokeObjectURL(previewUrl.value);
   }
@@ -86,17 +88,24 @@ async function onUpload() {
     return;
   }
   previewUrl.value = URL.createObjectURL(file);
+}
 
-  // const extension = getFileExtension(file);
+async function uploadFiles() {
+  const {
+    data: { file },
+  } = await file$.$validate();
 
-  // const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
-  // const {
-  //   data: { publicUrl },
-  // } = client.storage.from('videos').getPublicUrl(`${vId.value}/video.${extension}`);
+  if (file == null) {
+    return;
+  }
 
-  // if (res.error) {
-  //   console.log(res.error);
-  // }
+  const extension = getFileExtension(file);
+
+  const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
+
+  if (res.error) {
+    console.log(res.error);
+  }
 }
 </script>
 
@@ -151,7 +160,7 @@ async function onUpload() {
             dropzone
             accept="video/*"
             class="min-h-60"
-            @change="onUpload"
+            @change="onSelectFile"
           />
           <template #help>
             <p
