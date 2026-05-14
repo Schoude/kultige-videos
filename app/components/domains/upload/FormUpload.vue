@@ -134,10 +134,13 @@ async function uploadFiles(vId: string) {
 
   const extension = getFileExtension(file);
 
-  const res = await client.storage.from('videos').upload(`${vId}/video.${extension}`, file);
+  const [res1] = await Promise.all([
+    client.storage.from('videos').upload(`${vId}/video.${extension}`, file),
+    client.storage.from('videos').upload(`${vId}/thumbnail.jpg`, thumbnailFile.value!),
+  ]);
 
-  if (res.error) {
-    console.log(res.error);
+  if (res1.error) {
+    console.log(res1.error);
   }
 }
 
