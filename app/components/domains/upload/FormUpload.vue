@@ -13,7 +13,7 @@ useHead({
     },
   ],
 });
-const client = useSupabaseClient();
+// const client = useSupabaseClient();
 const toast = useToast();
 const router = useRouter();
 const loading = ref(false);
@@ -69,7 +69,12 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 }
 
 async function onUpload() {
+  if (previewUrl.value !== '') {
+    URL.revokeObjectURL(previewUrl.value);
+  }
+
   previewUrl.value = '';
+
   vId.value = generateVideoId();
 
   const {
@@ -80,18 +85,18 @@ async function onUpload() {
   if (!valid || file == null) {
     return;
   }
+  previewUrl.value = URL.createObjectURL(file);
 
-  const extension = getFileExtension(file);
+  // const extension = getFileExtension(file);
 
-  const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
-  const {
-    data: { publicUrl },
-  } = client.storage.from('videos').getPublicUrl(`${vId.value}/video.${extension}`);
-  previewUrl.value = publicUrl;
+  // const res = await client.storage.from('videos').upload(`${vId.value}/video.${extension}`, file);
+  // const {
+  //   data: { publicUrl },
+  // } = client.storage.from('videos').getPublicUrl(`${vId.value}/video.${extension}`);
 
-  if (res.error) {
-    console.log(res.error);
-  }
+  // if (res.error) {
+  //   console.log(res.error);
+  // }
 }
 </script>
 
