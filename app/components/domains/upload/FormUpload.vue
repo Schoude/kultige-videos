@@ -190,7 +190,7 @@ watch(thumbnailStart, (newStart) => {
           :items="thumbnailStartingPoints"
           orientation="horizontal"
           variant="table"
-          inditator="hidden"
+          indicator="hidden"
         />
       </UFormField>
 
