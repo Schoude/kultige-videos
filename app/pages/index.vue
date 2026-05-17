@@ -32,7 +32,7 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
     <UPageColumns>
       <UPageCard
         v-for="video of videos"
-        :key="video.title"
+        :key="video.url_id"
         role="listitem"
         variant="soft"
         reverse
