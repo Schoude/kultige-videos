@@ -4,31 +4,48 @@ import type { Database } from '~~/types/database.types';
 const client = useSupabaseClient<Database>();
 
 const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
-  const { data } = await client.from('videos').select('title, description').order('created_at').abortSignal(signal);
+  const { data } = await client
+    .from('videos')
+    .select('title, description, url_id, view_count')
+    .order('created_at')
+    .abortSignal(signal);
 
-  return data;
+  if (data == null) {
+    return [];
+  }
+
+  const withThumbnail = data?.map((vid) => {
+    const { data } = client.storage.from('videos').getPublicUrl(`${vid.url_id}/thumbnail.jpg`);
+
+    return {
+      thumbnail: data.publicUrl,
+      ...vid,
+    };
+  });
+
+  return withThumbnail;
 });
 </script>
 
 <template>
   <div>
-    <UPageList
-      as="ul"
-      :ui="{ base: 'gap-4' }"
-    >
+    <UPageColumns>
       <UPageCard
         v-for="video of videos"
         :key="video.title"
         role="listitem"
         variant="soft"
+        reverse
+        :title="video.title"
+        :description="video.view_count.toString() + ' Aufrufe'"
+        :to="`/watch?v=${video.url_id}`"
       >
-        <template #body>
-          <span>
-            {{ video.title }}
-          </span>
-          <span v-if="video.description">, {{ video.description }}</span>
-        </template>
+        <img
+          :src="video.thumbnail"
+          alt=""
+          class="rounded-md"
+        >
       </UPageCard>
-    </UPageList>
+    </UPageColumns>
   </div>
 </template>
