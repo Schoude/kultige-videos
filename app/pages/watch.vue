@@ -33,6 +33,21 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     data: { publicUrl },
   } = client.storage.from('videos').getPublicUrl(`${videoData?.url_id}/video.mp4`);
 
+  if (videoData == null) {
+    return null;
+  }
+
+  const newCount = (videoData.view_count ?? 0) + 1;
+
+  await client
+    .from('videos')
+    .update({
+      view_count: newCount,
+    })
+    .eq('url_id', vId as string);
+
+  videoData.view_count = newCount;
+
   return {
     url: publicUrl,
     ...videoData,
@@ -57,7 +72,7 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     </h1>
 
     <p class="text-sm">
-      {{ video!.view_count }} Aufrufe&nbsp;&nbsp;am {{ new Date(video!.created_at!).toLocaleDateString() }}
+      {{ video!.view_count }} Aufrufe&nbsp;&nbsp;am {{ new Date(video!.created_at!).toLocaleDateString('de-DE') }}
     </p>
     <p class="bg-muted mt-2 rounded-md p-2 text-sm">
       {{ video!.description }}
