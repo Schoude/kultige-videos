@@ -74,7 +74,10 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     <p class="text-sm">
       {{ video!.view_count }} Aufrufe&nbsp;&nbsp;am {{ new Date(video!.created_at!).toLocaleDateString('de-DE') }}
     </p>
-    <p class="bg-muted mt-2 rounded-md p-2 text-sm">
+    <p
+      v-if="video!.description"
+      class="bg-muted mt-2 rounded-md p-2 text-sm"
+    >
       {{ video!.description }}
     </p>
   </section>

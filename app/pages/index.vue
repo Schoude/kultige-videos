@@ -7,7 +7,7 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
   const { data } = await client
     .from('videos')
     .select('title, description, url_id, view_count')
-    .order('created_at')
+    .order('created_at', { ascending: false })
     .abortSignal(signal);
 
   if (data == null) {
@@ -29,7 +29,7 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
 
 <template>
   <div>
-    <UPageColumns>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <UPageCard
         v-for="video of videos"
         :key="video.url_id"
@@ -43,9 +43,9 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
         <img
           :src="video.thumbnail"
           alt=""
-          class="rounded-md"
+          class="aspect-video h-auto w-full rounded-md object-cover"
         >
       </UPageCard>
-    </UPageColumns>
+    </div>
   </div>
 </template>
