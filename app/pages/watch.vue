@@ -76,7 +76,6 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     </p>
     <p class="bg-muted mt-2 rounded-md p-2 text-sm">
       {{ video!.description }}
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, ullam.
     </p>
   </section>
 </template>
