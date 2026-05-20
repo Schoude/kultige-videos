@@ -37,6 +37,9 @@ export default defineNuxtConfig({
     '/upload': {
       appMiddleware: ['admin'],
     },
+    '/edit': {
+      appMiddleware: ['admin'],
+    },
   },
 
   compatibilityDate: '2025-01-15',
