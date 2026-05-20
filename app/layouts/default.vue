@@ -118,7 +118,7 @@ async function signOut() {
           </template>
         </USidebar>
 
-        <UMain class="flex-1 p-4">
+        <UMain class="h-[calc(100vh-var(--ui-header-height))] flex-1 overflow-auto p-4">
           <slot />
         </UMain>
       </div>

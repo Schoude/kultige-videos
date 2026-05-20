@@ -3,6 +3,9 @@ import type { Database } from '~~/types/database.types';
 
 const client = useSupabaseClient<Database>();
 
+const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
+  return useIsAdmin();
+});
 const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
   const { data } = await client
     .from('videos')
@@ -45,6 +48,17 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
           alt=""
           class="aspect-video h-auto w-full rounded-md object-cover"
         >
+        <UButton
+          v-if="isAdmin"
+          class="z-10 w-fit"
+          variant="outline"
+          color="warning"
+          :to="`/edit?v=${video.url_id}`"
+          size="xs"
+          icon="i-lucide-pen"
+        >
+          Edit
+        </UButton>
       </UPageCard>
     </div>
   </div>
