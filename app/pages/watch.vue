@@ -18,6 +18,9 @@ if (vId == null || vId === '') {
 
 const client = useSupabaseClient();
 
+const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
+  return useIsAdmin();
+});
 const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal }) => {
   if (vId == null) {
     return null;
@@ -68,6 +71,17 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     </video-player>
 
     <h1 class="my-2 text-xl font-semibold">
+      <UButton
+        v-if="isAdmin"
+        class="z-10 w-fit"
+        variant="outline"
+        color="warning"
+        :to="`/edit?v=${video!.url_id}`"
+        size="xs"
+        icon="i-lucide-pen"
+      >
+        Edit
+      </UButton>
       {{ video!.title }}
     </h1>
 
