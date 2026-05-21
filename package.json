@@ -19,9 +19,9 @@
     "@iconify-json/simple-icons": "^1.2.83",
     "@nuxt/ui": "^4.7.1",
     "@nuxtjs/supabase": "2.0.8",
-    "@regle/core": "^1.25.2",
-    "@regle/nuxt": "^1.25.2",
-    "@regle/rules": "^1.25.2",
+    "@regle/core": "^1.26.0",
+    "@regle/nuxt": "^1.26.0",
+    "@regle/rules": "^1.26.0",
     "nanoid": "^5.1.11",
     "nuxt": "^4.4.6",
     "tailwindcss": "^4.3.0"
