@@ -37,16 +37,6 @@ async function signIn(provider: 'google' | 'kakao') {
         size="xl"
         @click="signIn('google')"
       />
-
-      <UButton
-        label="Kakao"
-        :loading
-        icon="i-simple-icons-kakao"
-        block
-        variant="outline"
-        size="xl"
-        @click="signIn('kakao')"
-      />
     </section>
   </UMain>
 </template>
