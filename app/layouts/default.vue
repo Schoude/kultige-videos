@@ -22,8 +22,9 @@ const items = [
     to: '/',
   },
   {
-    label: 'Trending',
-    icon: 'i-lucide-house',
+    label: 'Video vorschlagen',
+    icon: 'i-lucide-hand-helping',
+    to: '/suggestion',
   },
 ] as NavigationMenuItem[];
 
