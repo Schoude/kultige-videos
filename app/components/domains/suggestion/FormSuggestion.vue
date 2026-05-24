@@ -27,9 +27,17 @@ const { r$ } = useRegle(
 
 type Schema = InferInput<typeof r$>;
 
-function onSubmit(event: FormSubmitEvent<Schema>) {
+async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true;
-  console.log('Form submitted with values:', event.data);
+
+  await $fetch('/api/suggestion', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(event.data),
+  });
+
   loading.value = false;
 }
 </script>
