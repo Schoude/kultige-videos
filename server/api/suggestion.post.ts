@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const res = await client.from('suggestions').insert({
-    name: body.name,
+    name: user.user_metadata?.full_name || user.user_metadata?.name || user.user_metadata?.email || 'Unknown User',
     reason: body.reason,
     video_url: body.videoUrl,
   });

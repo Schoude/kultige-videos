@@ -7,13 +7,8 @@ import { useRegle } from '#imports';
 
 const loading = ref(false);
 const { r$ } = useRegle(
-  { name: '', videoUrl: '', reason: '' },
+  { videoUrl: '', reason: '' },
   {
-    name: {
-      required,
-      minLength: withMessage(minLength(2), 'Muss min. 2 Zeichen lang sein'),
-      maxLength: withMessage(maxLength(50), 'Darf max. 50 Zeichen lang sein'),
-    },
     videoUrl: {
       required,
       url: withMessage(httpUrl({ protocol: /^https$/ }), 'Ungültige URL'),
@@ -49,28 +44,16 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     class="mx-auto block w-[50%] space-y-4"
     @submit.prevent="onSubmit"
   >
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      <UFormField
-        label="Wie heisst du?"
-        name="name"
-      >
-        <UInput
-          v-model="r$.$value.name"
-          size="xl"
-          :ui="{ root: 'w-full' }"
-        />
-      </UFormField>
-      <UFormField
-        label="Video-URL"
-        name="videoUrl"
-      >
-        <UInput
-          v-model="r$.$value.videoUrl"
-          size="xl"
-          :ui="{ root: 'w-full' }"
-        />
-      </UFormField>
-    </div>
+    <UFormField
+      label="Video-URL"
+      name="videoUrl"
+    >
+      <UInput
+        v-model="r$.$value.videoUrl"
+        size="xl"
+        :ui="{ root: 'w-full' }"
+      />
+    </UFormField>
     <UFormField
       label="Warum ist das Video kultig?"
       name="reason"
