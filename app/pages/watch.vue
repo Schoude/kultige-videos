@@ -61,7 +61,7 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
 <template>
   <section>
     <video-player>
-      <video-skin class="w-[66%]">
+      <video-skin class="w-full lg:w-[66%]">
         <video
           class="aspect-video"
           :src="video!.url"
