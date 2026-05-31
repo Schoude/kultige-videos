@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui';
 
-const client = useSupabaseClient();
-const loading = ref(false);
-const { data: list } = await useAsyncData('suggestion-list', async (_, { signal }) => {
-  loading.value = true;
-  const { data } = await client.from('suggestions').select('*').abortSignal(signal);
+const button$ = resolveComponent('UButton');
 
-  loading.value = false;
+const client = useSupabaseClient();
+const {
+  data: list,
+  refresh,
+  status,
+} = await useAsyncData('suggestion-list', async (_, { signal }) => {
+  const { data } = await client.from('suggestions').select('*').abortSignal(signal);
 
   if (data == null) {
     return [];
@@ -16,6 +18,7 @@ const { data: list } = await useAsyncData('suggestion-list', async (_, { signal 
   return data;
 });
 
+const deleteId = ref<number | null>(null);
 const columns: TableColumn<{
   id: number;
   name: string;
@@ -23,6 +26,23 @@ const columns: TableColumn<{
   reason: string | null;
   created_at: string;
 }>[] = [
+  {
+    id: 'go-to-video',
+    header: '',
+    cell: ({ row }) => {
+      return h(button$, {
+        icon: 'i-lucide-trash',
+        size: 'xs',
+        color: 'error',
+        variant: 'subtle',
+        label: 'Vorschlag löschen',
+        onClick: () => {
+          deleteId.value = row.original.id;
+          open.value = true;
+        },
+      });
+    },
+  },
   {
     accessorKey: 'id',
     header: '#',
@@ -58,6 +78,22 @@ const columns: TableColumn<{
     },
   },
 ];
+
+const open = ref(false);
+const isDeleting = ref(false);
+async function onDelete() {
+  isDeleting.value = true;
+
+  await $fetch(`/api/suggestion/${deleteId.value}`, {
+    method: 'DELETE',
+  });
+  await refresh();
+
+  deleteId.value = null;
+  isDeleting.value = false;
+
+  open.value = false;
+}
 </script>
 
 <template>
@@ -69,7 +105,25 @@ const columns: TableColumn<{
     <UTable
       :columns="columns"
       :data="list"
-      :loading="loading"
+      :loading="status === 'pending'"
     />
+
+    <UModal
+      v-model:open="open"
+      title="Vorschlag löschen"
+      :dismissable="false"
+    >
+      <template #body>
+        <p>Willst du diesen Vorschlag wirklich löschen?</p>
+      </template>
+
+      <template #footer>
+        <UButton
+          :disabled="isDeleting"
+          label="Löschen"
+          @click="onDelete()"
+        />
+      </template>
+    </UModal>
   </UMain>
 </template>
