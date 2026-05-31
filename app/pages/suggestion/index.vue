@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// const supabase = useSupabaseClient();
 import FormSuggestion from '~/components/domains/suggestion/FormSuggestion.vue';
 </script>
 

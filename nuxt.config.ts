@@ -40,6 +40,9 @@ export default defineNuxtConfig({
     '/edit': {
       appMiddleware: ['admin'],
     },
+    '/suggestion/*': {
+      appMiddleware: ['admin'],
+    },
   },
 
   compatibilityDate: '2025-01-15',

@@ -30,6 +30,11 @@ const items = [
 
 if (isAdmin.value) {
   items.push({
+    label: 'Vorschlagsliste',
+    icon: 'i-lucide-list-check',
+    to: '/suggestion/list',
+  });
+  items.push({
     label: 'Video hochladen',
     icon: 'i-lucide-circle-plus',
     to: '/upload',
