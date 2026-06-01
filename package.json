@@ -15,7 +15,7 @@
     "supabase": "vpx supabase"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.110",
+    "@iconify-json/lucide": "^1.2.111",
     "@iconify-json/simple-icons": "^1.2.84",
     "@nuxt/ui": "^4.8.1",
     "@nuxtjs/supabase": "2.0.9",
@@ -29,10 +29,10 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "@types/node": "^25.9.1",
-    "eslint": "^10.4.0",
-    "oxfmt": "^0.52.0",
+    "eslint": "^10.4.1",
+    "oxfmt": "^0.53.0",
     "typescript": "^6.0.3",
-    "vue-tsc": "^3.3.2"
+    "vue-tsc": "^3.3.3"
   },
   "packageManager": "pnpm@11.5.0"
 }

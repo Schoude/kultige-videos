@@ -19,7 +19,7 @@ if (vId == null || vId === '') {
 const client = useSupabaseClient();
 
 const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
-  return useIsAdmin();
+  return (await useIsAdmin()).isAdmin.value;
 });
 const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal }) => {
   if (vId == null) {

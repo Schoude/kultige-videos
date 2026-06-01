@@ -4,7 +4,7 @@ import type { Database } from '~~/types/database.types';
 const client = useSupabaseClient<Database>();
 
 const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
-  return useIsAdmin();
+  return (await useIsAdmin()).isAdmin.value;
 });
 const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
   const { data } = await client

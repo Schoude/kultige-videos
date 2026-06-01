@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     '/edit': {
       appMiddleware: ['admin'],
     },
-    '/suggestion/*': {
+    '/suggestion/list': {
       appMiddleware: ['admin'],
     },
   },
