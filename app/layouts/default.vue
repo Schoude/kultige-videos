@@ -67,6 +67,15 @@ async function signOut() {
     globalThis.location.reload();
   }
 }
+
+const router = useRouter();
+const searchQuery = ref('');
+
+async function onSearch() {
+  if (searchQuery.value) {
+    await router.push({ path: '/results', query: { search_query: searchQuery.value } });
+  }
+}
 </script>
 
 <template>
@@ -85,6 +94,25 @@ async function signOut() {
             @click="open = !open"
           />
         </template>
+
+        <UInput
+          v-model.trim="searchQuery"
+          size="md"
+          variant="outline"
+          placeholder="Suchen"
+          class="w-sm lg:w-lg"
+        >
+          <template #trailing>
+            <UButton
+              color="neutral"
+              variant="link"
+              size="sm"
+              icon="i-lucide-search"
+              aria-label="Suche starten"
+              @click="onSearch"
+            />
+          </template>
+        </UInput>
       </UHeader>
 
       <div class="flex min-h-0 flex-1">
