@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.111",
-    "@iconify-json/simple-icons": "^1.2.84",
-    "@nuxt/ui": "^4.8.1",
+    "@iconify-json/simple-icons": "^1.2.85",
+    "@nuxt/ui": "^4.8.2",
     "@nuxtjs/supabase": "2.0.9",
     "@regle/core": "^1.26.1",
     "@regle/nuxt": "^1.26.1",
     "@regle/rules": "^1.26.1",
     "nanoid": "^5.1.11",
-    "nuxt": "^4.4.6",
+    "nuxt": "^4.4.7",
     "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
