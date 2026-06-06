@@ -76,7 +76,7 @@ const searchQuery = ref('');
 
 async function onSearch() {
   if (searchQuery.value) {
-    await router.push({ path: '/results', query: { search_query: searchQuery.value } });
+    await router.push({ path: '/results', query: { search_query: searchQuery.value }, force: true });
   }
 }
 </script>
