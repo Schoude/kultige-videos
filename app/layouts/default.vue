@@ -104,6 +104,7 @@ async function onSearch() {
           variant="outline"
           placeholder="Suchen"
           class="w-sm lg:w-lg"
+          @keyup.enter="onSearch"
         >
           <template #trailing>
             <UButton
@@ -144,6 +145,7 @@ async function onSearch() {
               variant="outline"
               placeholder="Suchen"
               class="w-full"
+              @keyup.enter="onSearch"
             >
               <template #trailing>
                 <UButton
