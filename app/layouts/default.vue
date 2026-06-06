@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
+import { useMediaQuery } from '@vueuse/core';
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
@@ -56,6 +57,8 @@ const userItems = [
 defineShortcuts({
   ctrl_b: () => (open.value = !open.value),
 });
+
+const showSearchInSidebar = useMediaQuery('(max-width: 1024px)');
 
 const loading = ref(false);
 
@@ -121,7 +124,8 @@ async function onSearch() {
           collapsible="icon"
           :ui="{
             gap: 'h-[calc(100%-var(--ui-header-height))]',
-            container: 'absolute top-(--ui-header-height) bottom-0 h-[calc(100%-var(--ui-header-height))]'
+            container: 'absolute top-(--ui-header-height) bottom-0 h-[calc(100%-var(--ui-header-height))]',
+            actions: 'w-full'
           }"
         >
           <UNavigationMenu
@@ -129,6 +133,30 @@ async function onSearch() {
             orientation="vertical"
             :ui="{ link: 'p-1.5 overflow-hidden' }"
           />
+
+          <template
+            v-if="showSearchInSidebar"
+            #actions
+          >
+            <UInput
+              v-model.trim="searchQuery"
+              size="md"
+              variant="outline"
+              placeholder="Suchen"
+              class="w-full"
+            >
+              <template #trailing>
+                <UButton
+                  color="neutral"
+                  variant="link"
+                  size="sm"
+                  icon="i-lucide-search"
+                  aria-label="Suche starten"
+                  @click="onSearch"
+                />
+              </template>
+            </UInput>
+          </template>
 
           <template #footer>
             <UDropdownMenu
