@@ -81,6 +81,7 @@ export type Database = {
           created_at: string
           deleted_at: string | null
           description: string | null
+          fts: unknown
           id: string
           title: string
           updated_at: string
@@ -92,6 +93,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          fts?: unknown
           id?: string
           title: string
           updated_at?: string
@@ -103,6 +105,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          fts?: unknown
           id?: string
           title?: string
           updated_at?: string
@@ -117,7 +120,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_videos_ranked: {
+        Args: { query: string }
+        Returns: {
+          description: string
+          id: string
+          rank: number
+          title: string
+          url_id: string
+          view_count: number
+        }[]
+      }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
       [_ in never]: never

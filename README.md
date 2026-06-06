@@ -62,3 +62,9 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 ## Renovate integration
 
 Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
+
+## Supabase
+
+### Generate Database Types
+
+`vp run supabase gen types typescript > types/database.types.ts`
