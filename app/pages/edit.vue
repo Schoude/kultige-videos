@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DangerZone from '~/components/domains/edit/DangerZone.vue';
 import FormEdit from '~/components/domains/edit/FormEdit.vue';
 
 const router = useRouter();
@@ -28,6 +29,10 @@ const { data: video } = await useAsyncData(`video-edit-${vId}`, async (_, { sign
 
   return videoData;
 });
+
+function onDelete() {
+  router.push('/');
+}
 </script>
 
 <template>
@@ -39,6 +44,14 @@ const { data: video } = await useAsyncData(`video-edit-${vId}`, async (_, { sign
     <FormEdit
       v-if="video"
       :video="video"
+    />
+
+    <USeparator class="my-4" />
+
+    <DangerZone
+      v-if="video"
+      :video-id="video.id"
+      @delete="onDelete"
     />
   </section>
 </template>
