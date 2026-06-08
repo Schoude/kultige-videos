@@ -3,8 +3,8 @@ import { sameAs, withMessage, required } from '@regle/rules';
 
 import { useRegle } from '#imports';
 
-const { videoId } = defineProps<{
-  videoId: string | null;
+const { urlId } = defineProps<{
+  urlId: string | null;
 }>();
 const emit = defineEmits<{
   delete: [];
@@ -32,23 +32,30 @@ async function onDelete() {
     return;
   }
 
-  if (videoId == null) {
+  if (urlId == null) {
     return;
   }
 
   isDeleting.value = true;
 
-  await $fetch('/api/delete', {
+  await $fetch(`/api/video/${urlId}`, {
     method: 'DELETE',
-    body: {
-      id: videoId,
-    },
   });
 
-  open.value = false;
   emit('delete');
   isDeleting.value = false;
+  open.value = false;
 }
+
+watch(
+  open,
+  (newValue) => {
+    if (newValue) {
+      r$.$reset({ toState: { confirmText: '' } });
+    }
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -91,6 +98,7 @@ async function onDelete() {
 
     <template #footer>
       <UButton
+        type="submit"
         form="delete-video"
         :disabled="r$.$invalid"
         label="Löschen"

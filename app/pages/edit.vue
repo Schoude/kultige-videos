@@ -49,8 +49,8 @@ function onDelete() {
     <USeparator class="my-4" />
 
     <DangerZone
-      v-if="video"
-      :video-id="video.id"
+      v-if="video && vId"
+      :url-id="vId as string"
       @delete="onDelete"
     />
   </section>
