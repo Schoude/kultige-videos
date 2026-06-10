@@ -56,43 +56,96 @@ const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal })
     ...videoData,
   };
 });
+
+const { data: videos } = await useAsyncData('videos-suggestion', async (_, { signal }) => {
+  const { data } = await client
+    .rpc('get_trending_videos', { max_limit: 1000, exclude_url_id: vId as string })
+    .abortSignal(signal);
+
+  if (data == null) {
+    return [];
+  }
+
+  const withThumbnail = data?.map((vid) => {
+    const { data } = client.storage.from('videos').getPublicUrl(`${vid.url_id}/thumbnail.jpg`);
+
+    return {
+      thumbnail: data.publicUrl,
+      ...vid,
+    };
+  });
+
+  return withThumbnail;
+});
 </script>
 
 <template>
-  <section>
-    <video-player>
-      <video-skin class="w-full lg:w-[66%]">
-        <video
-          class="aspect-video"
-          :src="video!.url"
-          autoplay
-        />
-      </video-skin>
-    </video-player>
+  <section class="grid grid-cols-1 gap-5 lg:grid-cols-[3fr_1fr]">
+    <div>
+      <video-player>
+        <video-skin class="w-full">
+          <video
+            class="aspect-video"
+            :src="video!.url"
+            autoplay
+          />
+        </video-skin>
+      </video-player>
 
-    <h1 class="my-2 text-xl font-semibold">
-      <UButton
-        v-if="isAdmin"
-        class="z-10 w-fit"
-        variant="outline"
-        color="warning"
-        :to="`/edit?v=${video!.url_id}`"
-        size="xs"
-        icon="i-lucide-pen"
+      <h1 class="my-2 text-xl font-semibold">
+        <UButton
+          v-if="isAdmin"
+          class="z-10 w-fit"
+          variant="outline"
+          color="warning"
+          :to="`/edit?v=${video!.url_id}`"
+          size="xs"
+          icon="i-lucide-pen"
+        >
+          Edit
+        </UButton>
+        {{ video!.title }}
+      </h1>
+
+      <p class="text-sm">
+        {{ video!.view_count }} Aufrufe&nbsp;&nbsp;am {{ new Date(video!.created_at!).toLocaleDateString('de-DE') }}
+      </p>
+      <p
+        v-if="video!.description"
+        class="bg-muted mt-2 rounded-md p-2 text-sm"
       >
-        Edit
-      </UButton>
-      {{ video!.title }}
-    </h1>
+        {{ video!.description }}
+      </p>
+    </div>
 
-    <p class="text-sm">
-      {{ video!.view_count }} Aufrufe&nbsp;&nbsp;am {{ new Date(video!.created_at!).toLocaleDateString('de-DE') }}
-    </p>
-    <p
-      v-if="video!.description"
-      class="bg-muted mt-2 rounded-md p-2 text-sm"
-    >
-      {{ video!.description }}
-    </p>
+    <aside class="md:grid md:grid-cols-2 md:gap-5 lg:block">
+      <UPageCard
+        v-for="videoSuggestion of videos"
+        :key="videoSuggestion.url_id"
+        role="listitem"
+        variant="soft"
+        reverse
+        :title="videoSuggestion.title"
+        :description="videoSuggestion.view_count.toString() + ' Aufrufe'"
+        :to="`/watch?v=${videoSuggestion.url_id}`"
+      >
+        <img
+          :src="videoSuggestion.thumbnail"
+          alt=""
+          class="aspect-video h-auto w-full rounded-md object-cover"
+        >
+        <UButton
+          v-if="isAdmin"
+          class="absolute right-5 bottom-5 z-10 w-fit"
+          variant="outline"
+          color="warning"
+          :to="`/edit?v=${videoSuggestion.url_id}`"
+          size="xs"
+          icon="i-lucide-pen"
+        >
+          Edit
+        </UButton>
+      </UPageCard>
+    </aside>
   </section>
 </template>
