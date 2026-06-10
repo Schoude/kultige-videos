@@ -65,19 +65,17 @@ const { data: videos } = useAsyncData(
             class="aspect-video h-auto w-full rounded-md object-cover"
           >
 
-          <template #footer>
-            <UButton
-              v-if="isAdmin"
-              class="z-10 w-fit"
-              variant="outline"
-              color="warning"
-              :to="`/edit?v=${video.url_id}`"
-              size="xs"
-              icon="i-lucide-pen"
-            >
-              Edit
-            </UButton>
-          </template>
+          <UButton
+            v-if="isAdmin"
+            class="absolute right-5 bottom-5 z-10 w-fit"
+            variant="outline"
+            color="warning"
+            :to="`/edit?v=${video.url_id}`"
+            size="xs"
+            icon="i-lucide-pen"
+          >
+            Edit
+          </UButton>
         </UPageCard>
       </div>
     </template>
