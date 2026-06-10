@@ -49,7 +49,7 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      include: ['@regle/core', '@regle/rules', 'nanoid'],
+      include: ['@regle/core', '@regle/rules', '@vueuse/core', 'nanoid'],
     },
   },
 

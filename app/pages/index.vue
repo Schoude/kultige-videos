@@ -6,12 +6,8 @@ const client = useSupabaseClient<Database>();
 const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
   return (await useIsAdmin()).isAdmin.value;
 });
-const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
-  const { data } = await client
-    .from('videos')
-    .select('title, description, url_id, view_count')
-    .order('created_at', { ascending: false })
-    .abortSignal(signal);
+const { data: videos } = await useAsyncData('videos-trending', async (_, { signal }) => {
+  const { data } = await client.rpc('get_trending_videos', { max_limit: 1000 }).abortSignal(signal);
 
   if (data == null) {
     return [];
@@ -48,17 +44,19 @@ const { data: videos } = await useAsyncData('videos', async (_, { signal }) => {
           alt=""
           class="aspect-video h-auto w-full rounded-md object-cover"
         >
-        <UButton
-          v-if="isAdmin"
-          class="z-10 w-fit"
-          variant="outline"
-          color="warning"
-          :to="`/edit?v=${video.url_id}`"
-          size="xs"
-          icon="i-lucide-pen"
-        >
-          Edit
-        </UButton>
+        <template #footer>
+          <UButton
+            v-if="isAdmin"
+            class="z-10 w-fit"
+            variant="outline"
+            color="warning"
+            :to="`/edit?v=${video.url_id}`"
+            size="xs"
+            icon="i-lucide-pen"
+          >
+            Edit
+          </UButton>
+        </template>
       </UPageCard>
     </div>
   </div>

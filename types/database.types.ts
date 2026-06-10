@@ -120,6 +120,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_trending_videos: {
+        Args: { exclude_url_id?: string; gravity?: number; max_limit?: number }
+        Returns: {
+          description: string
+          title: string
+          url_id: string
+          view_count: number
+        }[]
+      }
       search_videos_ranked: {
         Args: { query: string }
         Returns: {
