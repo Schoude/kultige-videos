@@ -55,7 +55,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UInput
           v-model="r$.$value.title"
           size="xl"
-          :ui="{ root: 'w-[50vw]' }"
+          :ui="{ root: 'w-full' }"
         />
       </UFormField>
 
@@ -66,13 +66,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UTextarea
           v-model="r$.$value.description"
           size="xl"
+          :ui="{ root: 'w-full' }"
           :rows="5"
           :resize="false"
-          :ui="{ root: 'w-[50vw]' }"
         />
       </UFormField>
 
-      <div class="flex w-[50vw] justify-between">
+      <div class="flex justify-between">
         <UButton
           type="submit"
           :loading

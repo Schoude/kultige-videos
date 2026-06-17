@@ -2,6 +2,15 @@
 import DangerZone from '~/components/domains/edit/DangerZone.vue';
 import FormEdit from '~/components/domains/edit/FormEdit.vue';
 
+useHead({
+  script: [
+    {
+      type: 'module',
+      src: 'https://cdn.jsdelivr.net/npm/@videojs/html/cdn/video.js',
+    },
+  ],
+});
+
 const router = useRouter();
 const route = useRoute();
 const vId = route.query.v;
@@ -18,7 +27,7 @@ const { data: video } = await useAsyncData(`video-edit-${vId}`, async (_, { sign
 
   const { data: videoData } = await client
     .from('videos')
-    .select('id, title, description')
+    .select('id, title, description, url_id')
     .eq('url_id', vId as string)
     .abortSignal(signal)
     .single();
@@ -26,8 +35,14 @@ const { data: video } = await useAsyncData(`video-edit-${vId}`, async (_, { sign
   if (videoData == null) {
     return null;
   }
+  const {
+    data: { publicUrl },
+  } = client.storage.from('videos').getPublicUrl(`${videoData?.url_id}/video.mp4`);
 
-  return videoData;
+  return {
+    ...videoData,
+    url: publicUrl,
+  };
 });
 
 function onDelete() {
@@ -36,22 +51,33 @@ function onDelete() {
 </script>
 
 <template>
-  <section>
-    <h1 class="mb-4 text-2xl">
-      Video bearbeiten
-    </h1>
+  <section class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+    <div>
+      <h1 class="mb-4 text-2xl">
+        Video bearbeiten
+      </h1>
 
-    <FormEdit
-      v-if="video"
-      :video="video"
-    />
+      <FormEdit
+        v-if="video"
+        :video="video"
+      />
 
-    <USeparator class="my-4" />
+      <USeparator class="my-4" />
 
-    <DangerZone
-      v-if="video && vId"
-      :url-id="vId as string"
-      @delete="onDelete"
-    />
+      <DangerZone
+        v-if="video && vId"
+        :url-id="vId as string"
+        @delete="onDelete"
+      />
+    </div>
+
+    <video-player v-if="video">
+      <video-skin>
+        <video
+          class="aspect-video"
+          :src="video!.url"
+        />
+      </video-skin>
+    </video-player>
   </section>
 </template>
