@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouteQuery } from '@vueuse/router';
+
 useHead({
   script: [
     {
@@ -9,10 +11,9 @@ useHead({
 });
 
 const router = useRouter();
-const route = useRoute();
-const vId = route.query.v;
+const vId = useRouteQuery('v');
 
-if (vId == null || vId === '') {
+if (vId == null || vId.value === '') {
   void router.push('/');
 }
 
@@ -21,62 +22,70 @@ const client = useSupabaseClient();
 const { data: isAdmin } = await useAsyncData('isAdmin', async () => {
   return (await useIsAdmin()).isAdmin.value;
 });
-const { data: video } = await useAsyncData(`video-${vId}`, async (_, { signal }) => {
-  if (vId == null) {
-    return null;
-  }
+const { data: video } = await useAsyncData(
+  `video-${vId.value}`,
+  async (_, { signal }) => {
+    if (vId == null) {
+      return null;
+    }
 
-  const { data: videoData } = await client
-    .from('videos')
-    .select('*')
-    .eq('url_id', vId as string)
-    .abortSignal(signal)
-    .single();
-  const {
-    data: { publicUrl },
-  } = client.storage.from('videos').getPublicUrl(`${videoData?.url_id}/video.mp4`);
+    const { data: videoData } = await client
+      .from('videos')
+      .select('*')
+      .eq('url_id', vId.value as string)
+      .abortSignal(signal)
+      .single();
+    const {
+      data: { publicUrl },
+    } = client.storage.from('videos').getPublicUrl(`${videoData?.url_id}/video.mp4`);
 
-  if (videoData == null) {
-    return null;
-  }
+    if (videoData == null) {
+      return null;
+    }
 
-  const newCount = (videoData.view_count ?? 0) + 1;
+    const newCount = (videoData.view_count ?? 0) + 1;
 
-  await client
-    .from('videos')
-    .update({
-      view_count: newCount,
-    })
-    .eq('url_id', vId as string);
+    await client
+      .from('videos')
+      .update({
+        view_count: newCount,
+      })
+      .eq('url_id', vId.value as string);
 
-  videoData.view_count = newCount;
-
-  return {
-    url: publicUrl,
-    ...videoData,
-  };
-});
-
-const { data: videos } = await useAsyncData('videos-suggestion', async (_, { signal }) => {
-  const { data } = await client
-    .rpc('get_trending_videos', { max_limit: 1000, exclude_url_id: vId as string })
-    .abortSignal(signal);
-
-  if (data == null) {
-    return [];
-  }
-
-  const withThumbnail = data?.map((vid) => {
-    const { data } = client.storage.from('videos').getPublicUrl(`${vid.url_id}/thumbnail.jpg`);
+    videoData.view_count = newCount;
 
     return {
-      thumbnail: data.publicUrl,
-      ...vid,
+      url: publicUrl,
+      ...videoData,
     };
-  });
+  },
+  { watch: [vId] },
+);
 
-  return withThumbnail;
-});
+const { data: videos } = await useAsyncData(
+  'videos-suggestion',
+  async (_, { signal }) => {
+    const { data } = await client
+      .rpc('get_trending_videos', { max_limit: 1000, exclude_url_id: vId.value as string })
+      .abortSignal(signal);
+
+    if (data == null) {
+      return [];
+    }
+
+    const withThumbnail = data?.map((vid) => {
+      const { data } = client.storage.from('videos').getPublicUrl(`${vid.url_id}/thumbnail.jpg`);
+
+      return {
+        thumbnail: data.publicUrl,
+        ...vid,
+      };
+    });
+
+    return withThumbnail;
+  },
+  { watch: [vId] },
+);
 </script>
 
 <template>
