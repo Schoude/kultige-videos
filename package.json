@@ -15,24 +15,24 @@
     "supabase": "vpx supabase"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.114",
-    "@iconify-json/simple-icons": "^1.2.86",
+    "@iconify-json/lucide": "^1.2.115",
+    "@iconify-json/simple-icons": "^1.2.88",
     "@nuxt/ui": "^4.9.0",
     "@nuxtjs/supabase": "2.0.9",
-    "@regle/core": "^1.28.0",
-    "@regle/nuxt": "^1.28.0",
-    "@regle/rules": "^1.28.0",
+    "@regle/core": "^1.28.2",
+    "@regle/nuxt": "^1.28.2",
+    "@regle/rules": "^1.28.2",
     "@vueuse/core": "^14.3.0",
     "@vueuse/router": "^14.3.0",
-    "nanoid": "^5.1.15",
+    "nanoid": "^5.1.16",
     "nuxt": "^4.4.8",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^4.3.2"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.16.0",
     "@types/node": "^25.9.4",
-    "eslint": "^10.5.0",
-    "oxfmt": "^0.55.0",
+    "eslint": "^10.6.0",
+    "oxfmt": "^0.56.0",
     "typescript": "^6.0.3",
     "vue-tsc": "^3.3.5"
   },
