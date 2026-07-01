@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 import { useMediaQuery } from '@vueuse/core';
+import { useRouteQuery } from '@vueuse/router';
 
+const vId = useRouteQuery('v');
+const content = useTemplateRef('content');
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const { isAdmin } = await useIsAdmin();
@@ -79,6 +82,16 @@ async function onSearch() {
     await router.push({ path: '/results', query: { search_query: searchQuery.value }, force: true });
   }
 }
+
+onMounted(() => {
+  watch(
+    vId,
+    () => {
+      content.value?.$el.scrollTo({ top: 0, behavior: 'instant' });
+    },
+    { immediate: true },
+  );
+});
 </script>
 
 <template>
@@ -182,7 +195,10 @@ async function onSearch() {
           </template>
         </USidebar>
 
-        <UMain class="h-[calc(100vh-var(--ui-header-height))] flex-1 overflow-auto p-4">
+        <UMain
+          ref="content"
+          class="h-[calc(100vh-var(--ui-header-height))] flex-1 overflow-auto p-4"
+        >
           <slot />
         </UMain>
       </div>
