@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 import { useMediaQuery } from '@vueuse/core';
-import { useRouteQuery } from '@vueuse/router';
 
-const vId = useRouteQuery('v');
-const content = useTemplateRef('content');
+const route = useRoute();
+
 const client = useSupabaseClient();
 const user = useSupabaseUser();
 const { isAdmin } = await useIsAdmin();
@@ -83,15 +82,17 @@ async function onSearch() {
   }
 }
 
-onMounted(() => {
-  watch(
-    vId,
-    () => {
-      content.value?.$el.scrollTo({ top: 0, behavior: 'instant' });
-    },
-    { immediate: true },
-  );
-});
+const content = ref<{ $el: HTMLElement } | null>(null);
+
+watch(
+  () => route.query.v,
+  () => {
+    nextTick(() => {
+      content.value?.$el?.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
@@ -107,7 +108,11 @@ onMounted(() => {
             icon="i-lucide-panel-left"
             variant="ghost"
             aria-label="Toggle sidebar"
-            @click="open = !open"
+            @click="
+              () => {
+                open = !open;
+              }
+            "
           />
         </template>
 
