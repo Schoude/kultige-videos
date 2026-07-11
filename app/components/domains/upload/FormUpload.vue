@@ -39,7 +39,7 @@ const { r$: file$ } = useRegle(
     file: {
       required,
       fileType: fileType(['video/mp4']),
-      maxFileSize: maxFileSize(MB_1 * 100),
+      maxFileSize: maxFileSize(MB_1 * 500),
     },
   },
 );

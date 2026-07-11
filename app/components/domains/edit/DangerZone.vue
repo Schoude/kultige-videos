@@ -70,7 +70,11 @@ watch(
       label="Video löschen"
       color="error"
       variant="outline"
-      @click="open = true"
+      @click="
+        () => {
+          open = true;
+        }
+      "
     />
   </div>
 
